@@ -2,6 +2,8 @@ package com.alansf.apidiariodebordo.entities;
 
 import com.alansf.apidiariodebordo.enums.ReadPeriod;
 import com.alansf.apidiariodebordo.enums.ReadStatus;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,18 +20,24 @@ public class Registry {
     @Id
     @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="seq_reg")
     private Integer idReg;
-    @Column(name="date")
+    @Column(name="date", nullable=false, length=10)
+    @JsonFormat(pattern = "dd-MM-yyyy")
     private Instant date;
-    @Column(name="period")
+    @Column(name="period", nullable=false)
     private Integer period;
-    @Column(name="timeEstimated")
+    @Column(name="timeEstimated", nullable=true, length=8)
+    @JsonFormat(pattern = "HH:mm:ss")
     private Instant timeEstimated;
-    @Column(name="activity")
+    @Column(name="activity", nullable=false, length=300)
     private String activity;
-    @Column(name="activityObjective")
+    @Column(name="activityObjective", nullable=false, length=300)
     private String activityObjective;
-    @Column(name="status")
+    @Column(name="status", nullable=true)
     private Integer status;
+    @JsonBackReference
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="User_idUser", referencedColumnName="idUser")
+    private User user;
 
     public Registry() { }
 

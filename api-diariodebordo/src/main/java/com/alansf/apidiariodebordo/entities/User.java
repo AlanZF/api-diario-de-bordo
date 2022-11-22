@@ -1,10 +1,13 @@
 package com.alansf.apidiariodebordo.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
+@Getter
+@Setter
 @Entity
 @Table(name="`User`")
 @AllArgsConstructor
@@ -15,9 +18,13 @@ public class User {
     @Id
     @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="seq_user")
     private Integer idUser;
-    @Column(name="email")
+    @Column(name="name", nullable=false)
+    private String name;
+    @Column(name="email", nullable=false, unique=true)
     private String email;
-    @Column(name="password")
+    @Column(name="password", nullable=false)
     private String password;
-
+    @JsonManagedReference
+    @OneToMany(mappedBy="user")
+    private List<Registry> registries;
 }
